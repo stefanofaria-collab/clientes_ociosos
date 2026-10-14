@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Clientes Ociosos">
+  <rect width="64" height="64" rx="15" fill="#0c2035"/>
+  <rect x="5" y="5" width="54" height="54" rx="13" fill="#16435a" stroke="#2b7487" stroke-width="1.5"/>
+  <g transform="translate(8 6) scale(1.5)" fill="none" stroke="#49d2d0" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M5 23a12 12 0 1 1 22 0" />
+    <path d="m16 19 7-9-3 11" fill="#49d2d0" stroke="none" />
+    <circle cx="16" cy="23" r="3" fill="#49d2d0" stroke="none" />
+  </g>
+</svg>

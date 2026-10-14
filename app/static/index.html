@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Clientes Ociosos · Monitoramento comercial</title>
+  <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=211">
+  <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon.png?v=211">
+  <link rel="shortcut icon" href="/favicon.ico?v=211">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="shell">
+  <aside class="side">
+    <div class="brand"><span class="brand-icon"><svg viewBox="0 0 32 32" fill="none"><path d="M5 23a12 12 0 1 1 22 0" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"/><path d="m16 19 7-9-3 11" fill="currentColor"/><circle cx="16" cy="23" r="3" fill="currentColor"/></svg></span><div>CLIENTES<span>OCIOSOS</span><small>INTELIGÊNCIA COMERCIAL</small></div></div>
+    <div class="workspace"><div class="workspace-icon">GC</div><div><strong>GestãoClick</strong><small>Monitoramento de clientes</small></div><span class="chevron">⌄</span></div>
+    <div class="section-label">MENU PRINCIPAL</div>
+    <nav class="menu"><a class="menu-item active" href="#painel"><span>▦</span> Visão geral</a><a class="menu-item" href="#distribuicao"><span>⌁</span> Distribuição de acesso</a><a class="menu-item" href="#clientes"><span>≡</span> Clientes monitorados</a><a class="menu-item" href="#alertas"><span>◷</span> Histórico de alertas</a><a class="menu-item" href="#configuracoes"><span>⚙</span> Configurações</a></nav>
+    <div class="side-bottom"><div class="side-status"><span class="status-dot"></span><div><strong>Monitor automático</strong><small>Todos os dias às <span id="sideSchedule">08:00</span></small></div></div><div class="help-copy">Os dados são atualizados sob demanda e registrados diariamente.</div><div class="profile"><span class="avatar">AD</span><div><strong>Administração</strong><small>Acesso gerencial</small></div><span>⋯</span></div></div>
+  </aside>
+  <main class="main" id="painel">
+    <div class="topbar"><div class="crumb">Comercial <span>/</span> Inteligência de clientes <span>/</span> <b id="breadcrumbCurrent">Visão geral</b></div><div class="top-right"><span class="pill" id="databaseStatus"><span class="status-dot"></span> Carregando fonte</span><span class="today" id="todayDate"></span><span class="profile-icon">SF</span></div></div>
+    <div class="content">
+      <div id="dashboardView">
+      <div class="heading"><div><div class="eyebrow">RELATÓRIO DE ENGAJAMENTO <span class="eyebrow-line"></span></div><h1>Monitoramento de acesso<span class="h1-dot">.</span></h1><p>Acompanhe a inatividade dos clientes e identifique riscos antes do churn.</p><p class="mail-internal-note">Os alertas por e-mail são exclusivamente internos. Nenhuma mensagem é enviada aos clientes.</p></div><div class="actions"><button class="button button-secondary" id="btnTestEmail">✉ <span>Enviar alerta real</span></button><button class="button button-primary" id="btnRefresh"><span id="refreshIcon">↻</span> Atualizar dados</button></div></div>
+      <div class="info-banner hidden" id="demoBanner"><strong>AMBIENTE DE DEMONSTRAÇÃO</strong><span>Os números exibidos são fictícios. Configure a conexão com o ClickDados no arquivo .env para visualizar clientes reais.</span></div>
+      <div class="info-banner error-banner hidden" id="errorBanner"><strong>Falha na atualização</strong><span id="errorMessage"></span></div>
+      <div class="date-meta"><div><span class="circle-icon">◉</span> <strong>Resumo da base</strong><span class="muted">•</span><span id="updatedAt">Atualizando...</span></div><span class="alert-badge" id="alertStatus">Alertas: verificando</span></div>
+      <div class="kpi-grid">
+        <div class="kpi-card"><div class="kpi-top"><span>CLIENTES MONITORADOS</span><span class="kpi-icon navy">▦</span></div><div class="kpi-value" id="kpiTotal">—</div><div class="kpi-foot"><span class="positive">●</span> Base ativa e elegível na consulta</div></div>
+        <div class="kpi-card"><div class="kpi-top"><span>MÉDIA SEM ACESSAR</span><span class="kpi-icon blue">◷</span></div><div class="kpi-value"><span id="kpiAverage">—</span><small>dias</small></div><div class="kpi-foot">Tempo desde o último acesso</div></div>
+        <div class="kpi-card"><div class="kpi-top"><span>SEM ACESSO HÁ 30+ DIAS</span><span class="kpi-icon amber">⚠</span></div><div class="kpi-value" id="kpiRisk">—</div><div class="kpi-foot"><span class="warning">●</span> Precisam de atenção comercial</div></div>
+        <div class="kpi-card featured"><div class="kpi-top"><span>ATINGIRAM UM PRAZO DE ALERTA</span><span class="kpi-icon light">↗</span></div><div class="kpi-value" id="kpiTrigger">—</div><div class="kpi-foot">Clientes que completaram um dos prazos cadastrados</div><div class="featured-detail">PRAZOS EM USO <span id="limitLabel">45 DIAS</span></div></div>
+      </div>
+      <div class="charts-grid">
+        <section class="panel chart-main" id="distribuicao"><div class="panel-heading"><div><div class="panel-pretitle">ANÁLISE DE INATIVIDADE</div><h2>Clientes por dias sem acesso</h2><p>Quantidade de clientes em cada dia de inatividade, de 2 a 45.</p></div><span class="legend"><span class="legend-dot"></span> Nº de clientes</span></div><div class="chart-wrap"><svg id="distributionChart" role="img" aria-label="Gráfico de linha mostrando os clientes por dia de inatividade" viewBox="0 0 730 272" preserveAspectRatio="none"></svg><div class="tooltip hidden" id="distTooltip"></div></div><div class="chart-note"><span>ⓘ</span> O gráfico começa no 2º dia e termina no 45º dia. Clientes com 1 dia ou mais de 45 dias não entram.</div></section>
+        <section class="panel trend" id="historico"><div class="panel-heading"><div><div class="panel-pretitle">ACOMPANHAMENTO DIÁRIO</div><h2>Evolução do risco</h2><p>Clientes com 30 dias ou mais de inatividade.</p></div><span class="trend-icon">↗</span></div><div class="trend-head"><div><small>CLIENTES EM RISCO</small><strong id="trendCurrent">—</strong></div><div class="mini-badge" id="trendVariation">Histórico diário</div></div><div class="chart-wrap small"><svg id="trendChart" role="img" aria-label="Evolução histórica de clientes em risco" viewBox="0 0 400 210" preserveAspectRatio="none"></svg></div><p class="trend-footer" id="trendFoot">O histórico começa a ser registrado a partir do primeiro acesso ao app.</p></section>
+      </div>
+      <div class="lower-grid">
+        <section class="panel table-panel" id="clientes"><div class="panel-heading"><div><div class="panel-pretitle">CARTEIRA DE CLIENTES</div><h2>Detalhamento dos acessos</h2><p>Consulte o último acesso e identifique quem precisa de contato.</p></div><div class="table-counter" id="clientTotal">— registros</div></div><div class="filters"><label class="search-wrap"><span>⌕</span><input id="searchId" autocomplete="off" placeholder="Buscar pelo ID ou razão social..." aria-label="Buscar por ID ou razão social"></label><div class="number-filter"><span>Dias sem acesso</span><input type="number" id="filterFrom" min="0" placeholder="De" aria-label="De dias"><span>—</span><input type="number" id="filterTo" min="0" placeholder="Até" aria-label="Até dias"></div><button class="text-button" id="btnClear">Limpar filtros</button><button class="button button-secondary" id="btnCopySheets">▤ Copiar para Google Sheets</button><button class="button button-primary" id="btnCSV">↓ Baixar CSV</button></div><div class="table-scroll"><table><thead><tr><th>ID</th><th>RAZÃO SOCIAL</th><th>PLANO</th><th>DURAÇÃO</th><th>VALOR</th><th>USUÁRIO</th><th>TELEFONE</th><th>CELULAR</th><th>E-MAIL</th><th>ÚLTIMO ACESSO</th><th>DIAS</th><th>INTRANET</th><th>STATUS</th></tr></thead><tbody id="clientRows"><tr><td colspan="13" class="loading">Carregando clientes...</td></tr></tbody></table></div><div class="table-bottom"><span id="rangeInfo">—</span><div class="pager"><button id="prevPage" aria-label="Página anterior">‹</button><span id="pageLabel">1</span><button id="nextPage" aria-label="Próxima página">›</button></div></div></section>
+        <section class="panel alerts-panel" id="alertas"><div class="panel-heading"><div><div class="panel-pretitle">CONTROLE DE COMUNICAÇÕES</div><h2>Alertas comerciais</h2><p>Notificações automáticas conforme o prazo de cada destinatário.</p></div></div><div class="email-status"><div class="email-icon">✉</div><div><span>Destinatário(s) da operação</span><strong id="alertEmails">—</strong></div></div><div class="alert-stats"><div><span>ACIMA DO MENOR PRAZO (<span id="overLimitLabel">45</span> DIAS)</span><strong id="kpiOver45">—</strong></div><div><span>SEM DATA DE ACESSO</span><strong id="kpiUnknown">—</strong></div></div><div class="recent-head"><strong>Últimas notificações</strong><span id="lastRuns">—</span></div><div class="history-list" id="alertRows"><div class="empty-state">Ainda não há notificações registradas.</div></div><div class="alert-buttons"><button class="button button-outline" id="btnMonitor">▶ Executar monitoramento</button></div><p class="subtle">A rotina automática executa uma vez por dia. O botão acima executa agora e pode enviar alertas se a função estiver ativada.</p></section>
+      </div>
+      <footer><span>CLIENTES OCIOSOS <b>·</b> INTELIGÊNCIA COMERCIAL</span><span>Dados exclusivamente de clientes elegíveis do GestãoClick. <span id="footerYear"></span></span></footer>
+      </div>
+      <section id="configView" class="config-view hidden" aria-labelledby="settingsTitle">
+        <div class="eyebrow">PERSONALIZAÇÃO DE ALERTAS <span class="eyebrow-line"></span></div>
+        <h1 id="settingsTitle">Configurações<span class="h1-dot">.</span></h1>
+        <p class="config-subtitle">Defina quando avisar e quais pessoas devem receber os relatórios comerciais.</p>
+        <div class="config-layout">
+          <div class="panel config-panel">
+            <div class="panel-pretitle">REGRA DE INATIVIDADE</div>
+            <h2>Período sem acesso</h2>
+            <p>Configure o prazo individualmente para cada destinatário. No mesmo dia, cada pessoa recebe somente os clientes que completaram exatamente o seu prazo.</p>
+            <div class="rule-example">Exemplo: Stefano pode receber empresas com <b>45 dias</b> e outro destinatário empresas com <b>15 dias</b>, em e-mails separados.</div>
+            <div class="rule-summary"><span>Prazos em uso</span><strong id="settingsThresholds">45 dias</strong></div>
+            <div class="config-separator"></div>
+            <label class="toggle-line"><span><strong>Ativar envio de alertas</strong><small>Se desativado, o painel monitora mas não envia notificações comerciais.</small></span><input type="checkbox" id="settingsEnabled"><span class="toggle-ui"></span></label>
+          </div>
+          <div class="panel config-panel">
+            <div class="panel-pretitle">DESTINATÁRIOS DOS E-MAILS</div>
+            <h2>Pessoas que receberão o alerta</h2>
+            <p class="internal-warning"><strong>Exclusivamente interno.</strong> Os e-mails dos clientes aparecem na tabela e no CSV, mas <strong>nunca recebem avisos</strong>. Apenas endereços corporativos autorizados podem ser destinatários.</p>
+            <p>Cadastre um e-mail e um período de inatividade para cada pessoa. É possível editar o período individualmente.</p>
+            <label class="field-label" for="recipientEmail">Novo destinatário e prazo</label>
+            <div class="add-email"><input type="email" id="recipientEmail" placeholder="nome@clickdigital.com.br" autocomplete="email"><input type="number" id="recipientDays" min="1" max="365" step="1" value="45" aria-label="Dias sem acesso para o novo destinatário" title="Dias sem acesso"><span class="suffix-days">dias</span><button class="button button-primary" id="btnAddRecipient">+ Adicionar</button></div>
+            <div id="recipientList" class="recipient-list"></div>
+            <p class="form-hint">Exemplo: stefano.faria@clickdigital.com.br — 45 dias; teste@clickdigital.com.br — 15 dias. Salve as configurações depois de adicionar ou editar.</p>
+          </div>
+          <div class="panel config-panel config-wide">
+            <div class="panel-pretitle">AUTOMAÇÃO E SEGURANÇA</div>
+            <h2>Detalhes de execução</h2>
+            <div class="config-facts"><div><span>Frequência</span><strong>Diária</strong></div><div><span>Horário</span><strong id="settingsSchedule">08:00 (Brasília)</strong></div><div><span>Servidor SMTP</span><strong id="smtpStatus">Verificando</strong></div></div>
+            <p>As configurações são gravadas no banco local do projeto e não alteram o ClickDados. É necessário manter o servidor em funcionamento para disparar os alertas.</p><p class="internal-warning"><strong>Enviar alerta real:</strong> o teste usa os dados atuais do MySQL e envia a mesma tabela e o mesmo CSV da automação, apenas para os destinatários internos já salvos. Não altera o histórico da rotina automática. Se clicar duas vezes, receberá dois e-mails.</p>
+            <div class="config-actions"><button class="button button-secondary" id="btnTestConfigEmail">✉ Enviar alerta real</button><button class="button button-primary" id="btnSaveSettings">Salvar configurações</button></div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+<div class="toast hidden" id="toast" role="status"></div>
+<script src="/static/main.js" defer></script>
+</body>
+</html>
